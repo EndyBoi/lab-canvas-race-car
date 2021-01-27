@@ -1,7 +1,91 @@
-window.onload = () => {
-  document.getElementById('start-button').onclick = () => {
-    startGame();
-  };
+var up,
+  right,
+  down,
+  left = false
+var car
+var x = 310
+var y = 475
+var ctx
 
-  function startGame() {}
-};
+const startGame = () => {
+  ctx = document.getElementById("canvas").getContext("2d")
+  // Car
+  car = new Image()
+  car.id = "car"
+  car.src = "./images/177.png"
+  car.onload = () => ctx.drawImage(car, 310, 475, 100, 200)
+  window.requestAnimationFrame(gameLoop)
+}
+
+const drawLoop = () => {
+  ctx.fillStyle = "purple"
+  ctx.fillRect(0, 0, 500, 700)
+  ctx.fillStyle = "gray"
+  ctx.fillRect(25, 0, 450, 700)
+  ctx.fillStyle = "white"
+  ctx.fillRect(40, 0, 10, 700)
+  ctx.fillStyle = "white"
+  ctx.fillRect(450, 0, 10, 700)
+  ctx.beginPath(250, 0)
+  ctx.strokeStyle = "white"
+  ctx.lineWidth = 5
+  ctx.setLineDash([45, 10])
+  ctx.moveTo(250, 700)
+  ctx.lineTo(250, 0)
+  ctx.stroke()
+  ctx.drawImage(car, x, y, 100, 200)
+}
+
+function press(e) {
+  if (e.keyCode === 38 /* up */ || e.keyCode === 87 /* w */) {
+    up = true
+  }
+  if (e.keyCode === 39 /* right */ || e.keyCode === 68 /* d */) {
+    right = true
+  }
+  if (e.keyCode === 40 /* down */ || e.keyCode === 83 /* s */) {
+    down = true
+  }
+  if (e.keyCode === 37 /* left */ || e.keyCode === 65 /* a */) {
+    left = true
+  }
+}
+
+function release(e) {
+  if (e.keyCode === 38 /* up */ || e.keyCode === 87 /* w */) {
+    up = false
+  }
+  if (e.keyCode === 39 /* right */ || e.keyCode === 68 /* d */) {
+    right = false
+  }
+  if (e.keyCode === 40 /* down */ || e.keyCode === 83 /* s */) {
+    down = false
+  }
+  if (e.keyCode === 37 /* left */ || e.keyCode === 65 /* a */) {
+    left = false
+  }
+}
+
+function gameLoop() {
+  if (up) {
+    y = y - 4
+  }
+  if (right) {
+    x = x + 6
+  }
+  if (down) {
+    y = y + 4
+  }
+  if (left) {
+    x = x - 6
+  }
+  console.log(x, y)
+  drawLoop()
+  window.requestAnimationFrame(gameLoop)
+}
+
+window.onload = function () {
+  document.addEventListener("keyup", release)
+  document.addEventListener("keydown", press)
+  document.getElementById("start-button").onclick = () => startGame()
+}
