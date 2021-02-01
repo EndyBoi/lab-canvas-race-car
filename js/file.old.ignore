@@ -7,16 +7,11 @@ var x = 310
 var y = 475
 var ctx
 
-const startGame = () => {
-  ctx = document.getElementById("canvas").getContext("2d")
-  // Car
-  car = new Image()
-  car.id = "car"
-  car.src = "./images/car.png"
-  car.onload = () => ctx.drawImage(car, 310, 475, 100, 200)
-  window.requestAnimationFrame(gameLoop)
+window.onload = () => {
+  document.getElementById("start-button").onclick = () => {
+    startGame()
+  }
 }
-
 const drawLoop = () => {
   ctx.fillStyle = "purple"
   ctx.fillRect(0, 0, 500, 700)
@@ -33,7 +28,15 @@ const drawLoop = () => {
   ctx.moveTo(250, 700)
   ctx.lineTo(250, 0)
   ctx.stroke()
-  ctx.drawImage(car, x, y, 100, 200)
+}
+
+const draw = (car) => {
+  ctx = document.getElementById("canvas").getContext("2d")
+  car = new Image()
+  car.id = "car"
+  car.src = "./images/car.png"
+  // car.onload = () => ctx.drawImage(car, 310, 475, 100, 200)
+  window.requestAnimationFrame(gameLoop)
 }
 
 function press(e) {
@@ -68,17 +71,18 @@ function release(e) {
 
 function gameLoop() {
   if (up) {
-    y = y - 10
+    y = y - 8
   }
   if (right) {
-    x = x + 10
+    x = x + 6
   }
   if (down) {
-    y = y + 10
+    y = y + 4
   }
   if (left) {
-    x = x - 10
+    x = x - 6
   }
+  console.log(x, y)
   drawLoop()
   window.requestAnimationFrame(gameLoop)
 }
@@ -88,3 +92,15 @@ window.onload = function () {
   document.addEventListener("keydown", press)
   document.getElementById("start-button").onclick = () => startGame()
 }
+
+function updateCanvas() {
+  console.log(car)
+  clearCanvas()
+  drawBoard()
+  drawObstacles()
+  draw(car)
+
+  window.requestAnimationFrame(updateCanvas)
+}
+
+window.requestAnimationFrame(updateCanvas)
